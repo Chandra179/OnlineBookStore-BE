@@ -1,4 +1,4 @@
-package com.alexandria.books.alexandriaBooks;
+package com.alexandria.books;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
