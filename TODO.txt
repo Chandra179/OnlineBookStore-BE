@@ -1,0 +1,2 @@
+SECURITY JWT (EMAIL, PW) accesstoken 7 days until refresh token implemented
+BOOKS (ENTITY, CONTROLLER)
