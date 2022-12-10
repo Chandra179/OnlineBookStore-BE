@@ -1,6 +1,6 @@
 package com.alexandria.books.jwtauth;
 
-import com.alexandria.books.security.MyUserDetailsService;
+import com.alexandria.books.config.MyUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

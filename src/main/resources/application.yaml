@@ -1,8 +1,19 @@
+springdoc:
+  version: '@springdoc.version@'
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
 spring:
-  application:
-    name: 'alexandria-books'
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     driverClassName: org.postgresql.Driver
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG

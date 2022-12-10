@@ -1,4 +1,4 @@
-package com.alexandria.books.security;
+package com.alexandria.books.config;
 
 import com.alexandria.books.jwtauth.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -36,15 +37,25 @@ public class SecurityConfig {
   }
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
-    http.
-      csrf().disable().authorizeHttpRequests()
-      .requestMatchers("/authenticate")
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+      .csrf().disable()
+      .authorizeHttpRequests()
+      .requestMatchers(
+        "/api-docs",
+        "/api-docs/**",
+        "/swagger*/**",
+        "/authenticate"
+      )
       .permitAll()
-      .anyRequest().authenticated().and()
+      .anyRequest()
+      .authenticated()
+      .and()
       .exceptionHandling().and().sessionManagement()
       .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
     http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
     return http.build();
   }
 
