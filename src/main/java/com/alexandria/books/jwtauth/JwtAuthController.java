@@ -8,12 +8,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @Tag(name = "Authentication")
 @RestController
@@ -37,12 +41,12 @@ class JwtAuthController {
       @ApiResponse(
         responseCode = "200",
         description = "Success authenticate user",
-        content = @Content(schema = @Schema(implementation = JwtAuthRequest.class))
+        content = @Content(schema = @Schema(implementation = JwtAuthResponse.class))
       ),
       @ApiResponse(
-        responseCode = "400",
+        responseCode = "403",
         description = "Failed authenticate user",
-        content = @Content(schema = @Schema(implementation = JwtAuthResponse.class))
+        content = @Content(schema = @Schema(implementation = ResponseStatusException.class))
       )
     }
   )
@@ -51,10 +55,7 @@ class JwtAuthController {
     consumes = {MediaType.APPLICATION_JSON_VALUE},
     produces = {MediaType.APPLICATION_JSON_VALUE}
   )
-  public JwtAuthResponse createAuthenticationToken(
-    @RequestBody JwtAuthRequest authenticationRequest
-  ) throws Exception {
-
+  public JwtAuthResponse authenticateUser(@RequestBody JwtAuthRequest authenticationRequest) throws ResponseStatusException {
     try {
       authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
@@ -62,8 +63,8 @@ class JwtAuthController {
         )
       );
     }
-    catch (BadCredentialsException e) {
-      throw new Exception("Incorrect username or password", e);
+    catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Incorrect username or password");
     }
     final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
     final String jwt = jwtTokenUtil.generateToken(userDetails);

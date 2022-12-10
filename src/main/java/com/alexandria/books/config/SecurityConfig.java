@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -45,7 +46,8 @@ public class SecurityConfig {
         "/api-docs",
         "/api-docs/**",
         "/swagger*/**",
-        "/authenticate"
+        "/authenticate",
+        "/error"
       )
       .permitAll()
       .anyRequest()
