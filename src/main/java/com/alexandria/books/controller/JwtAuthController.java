@@ -1,8 +1,8 @@
 package com.alexandria.books.controller;
 
 import com.alexandria.books.config.MyUserDetailsService;
-import com.alexandria.books.dto.JwtAuthRequest;
-import com.alexandria.books.dto.JwtAuthResponse;
+import com.alexandria.books.dto.jwtauh.JwtAuthRequest;
+import com.alexandria.books.dto.jwtauh.JwtAuthResponse;
 import com.alexandria.books.jwtauth.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -55,7 +55,9 @@ class JwtAuthController {
     consumes = {MediaType.APPLICATION_JSON_VALUE},
     produces = {MediaType.APPLICATION_JSON_VALUE}
   )
-  public JwtAuthResponse authenticateUser(@RequestBody JwtAuthRequest authenticationRequest) throws ResponseStatusException {
+  public JwtAuthResponse authenticateUser(
+    @RequestBody JwtAuthRequest authenticationRequest
+  ) throws ResponseStatusException {
     try {
       authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(

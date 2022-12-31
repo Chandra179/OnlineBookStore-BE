@@ -2,8 +2,11 @@ package com.alexandria.books.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -33,9 +36,13 @@ public class Book implements Serializable {
   @GeneratedValue
   private UUID id;
 
-  @ManyToMany
-  Set<Author> author;
-
   @Column
   private String title;
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+    name = "book_author",
+    joinColumns = @JoinColumn(name = "book_id"),
+    inverseJoinColumns = @JoinColumn(name = "author_id"))
+  Set<Author> authors;
 }

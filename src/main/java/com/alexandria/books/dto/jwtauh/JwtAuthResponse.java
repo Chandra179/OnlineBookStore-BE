@@ -1,4 +1,4 @@
-package com.alexandria.books.dto;
+package com.alexandria.books.dto.jwtauh;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
