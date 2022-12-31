@@ -21,7 +21,7 @@ logging:
             CommonsRequestLoggingFilter: DEBUG
 
   pattern:
-    console: '%d{dd-MM-yyyy HH:mm:ss.SSS} [%-3level] [%-10thread] [%-20X{correlationId}] [%C{0}@%L]: %msg%n'
+    console: '%d{dd-MM-yyyy HH:mm:ss.SSS} [%-3level] [%-10thread] [%C{0}@%L]: %msg%n'
 
 server:
   error:

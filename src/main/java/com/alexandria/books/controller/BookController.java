@@ -1,8 +1,7 @@
 package com.alexandria.books.controller;
 
 import com.alexandria.books.entity.Book;
-import com.alexandria.books.repository.AuthorRepository;
-import com.alexandria.books.repository.BookRepository;
+import com.alexandria.books.service.BookServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,9 +9,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,14 +20,12 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Tag(name = "Book")
+@RequestMapping("/books")
 @RestController
-class BookController {
+public class BookController {
 
   @Autowired
-  BookRepository bookRepository;
-
-  @Autowired
-  AuthorRepository authorRepository;
+  BookServiceImpl bookService;
 
   @Operation(
     description = "Get all books",
@@ -47,15 +45,14 @@ class BookController {
     }
   )
   @GetMapping(
-    value = "/books",
+    value = "",
     produces = {MediaType.APPLICATION_JSON_VALUE}
   )
-  public List<Book> getAllBooks() throws ResponseStatusException {
-    List<Book> bookList = bookRepository.findAll();
-    if (bookList.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No book found");
-    }
-    return bookList;
+  public Page<Book> getAllBooks(
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "5") int size
+  ) throws ResponseStatusException {
+    return bookService.findAllBooks(page, size);
   }
 
   @Operation(
@@ -82,11 +79,7 @@ class BookController {
   public List<Book> getBook(
     @RequestParam("book_title") String title
   ) throws ResponseStatusException {
-    List<Book> bookList = bookRepository.findByBookTitleLike(title);
-    if (bookList.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No book found");
-    }
-    return bookList;
+    return bookService.findBookByTitle(title);
   }
 
 }
